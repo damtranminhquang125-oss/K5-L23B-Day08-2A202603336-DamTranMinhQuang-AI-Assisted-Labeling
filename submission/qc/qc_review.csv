@@ -1,0 +1,10 @@
+image,object_id,error_type,reviewer,note
+img_003.jpg,,khong,Copilot,"Không thấy lỗi rõ qua rà soát bằng mắt; các vật chính nhìn thấy đều có box."
+img_006.jpg,,khong,Copilot,"Không thấy lỗi rõ; cụm xe máy đông được biểu diễn bằng các box và ignore_region."
+img_013.jpg,130,sai_lop,Copilot,"Box #130 gán truck cho xe van/minivan trắng phía sau; taxonomy xếp minivan vào car. Cần xác nhận lại loại xe trên ảnh gốc."
+img_013.jpg,136,sai_vi_tri_kich_thuoc,Copilot,"Box three_wheeler quá rộng, kéo xuống mép dưới ảnh và bao gồm nền/xe phía sau; cần bó sát phần xe nhìn thấy."
+img_014.jpg,,khong,Copilot,"Không thấy lỗi rõ ở các người và xe nhìn thấy; xe đẩy hàng không thuộc lớp cần gán."
+img_017.jpg,,khong,Copilot,"Không thấy lỗi rõ; các tuk-tuk và người đi bộ nhìn thấy có box riêng."
+img_022.jpg,,khong,Copilot,"Không thấy lỗi rõ qua rà soát bằng mắt; ảnh đông, ignore_region dùng cho cụm khó tách."
+img_027.jpg,,khong,Copilot,"Không thấy lỗi rõ qua rà soát bằng mắt; các xe và người nổi bật có box."
+img_035.jpg,,khong,Copilot,"Không thấy lỗi rõ qua rà soát bằng mắt; xe ba bánh và các phương tiện/người nổi bật có box."
