@@ -2,8 +2,8 @@
   <img src="docs/assets/hero.png" alt="Day 08 Lab: AI hỗ trợ gán nhãn" width="100%">
 </p>
 
-Day 08 Lab — 2A202603336 - Đàm Trần Minh Quang
-# Day 08 Lab — AI hỗ trợ gán nhãn: Pre-label, Review, Calibration
+
+# Day 08 Lab — AI hỗ trợ gán nhãn: Pre-label, Review, Calibration — 2A202603336 - Đàm Trần Minh Quang
 
 <p align="center">
   <img alt="cá nhân" src="https://img.shields.io/badge/lab-cá%20nhân-0b1f3a">
