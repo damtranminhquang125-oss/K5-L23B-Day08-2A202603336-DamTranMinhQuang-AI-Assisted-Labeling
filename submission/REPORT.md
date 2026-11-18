@@ -6,16 +6,22 @@
 
 | Lớp | Model + cỡ | Ngưỡng | Vì sao (dẫn `run_id` trong `model_log.csv`) |
 |---|---|---|---|
-| person / bicycle / motorbike / car / bus / truck | YOLO26m | 0.25 | <<>> |
-| person / bicycle / motorbike / car / bus / truck | YOLO26m | 0.5 | <<>> |
-| three_wheeler | YOLOE-26s | 0.25 | <<>> |
-| person / motorbike / car | YOLO26 + SAM 2.1 | <<0.25>> | <<>> |
+| person / bicycle / motorbike / car / bus / truck | YOLO26m | 0.25 | r01,2,yolo26-m,--model yolo26 --size m --split pilot --conf 0.25 --out work/prelabel/t_y26,pilot,215,0.73,"Phát hiện được người, xe máy và ô tô trong nhiều ảnh; bắt được phương tiện ở cảnh đông.","Tuk-tuk thường bị gán car/truck thay vì three_wheeler; cảnh đông có nhiều box person/motorbike chồng lặp hoặc dư.",,work\prelabel\t_y26,cpu,8,0,umbrellax10;handbagx2;traffic lightx2;backpackx2, |
+| person / bicycle / motorbike / car / bus / truck | YOLO26m | 0.5 | r02,2,yolo26-m,--model yolo26 --size m --split pilot --conf 0.5 --out work/prelabel/t_y26_c05,pilot,139,0.72,"Ngưỡng 0.5 giảm nhiều box điểm thấp và box nhiễu so với conf 0.25; các vật nổi bật vẫn được phát hiện.","Vẫn bỏ sót người và xe nhỏ ở xa; tuk-tuk vẫn bị gán car/truck, và một số box còn chồng lặp.",,work\prelabel\t_y26_c05,cpu,8,0,umbrellax5;handbagx2;traffic lightx1;backpackx1, |
+| three_wheeler | YOLOE-26s | 0.25 | r03,2,yoloe-s,--model yoloe --classes three_wheeler --split pilot --conf 0.25 --out work/prelabel/t_yoloe,pilot,8,0.28,"Phát hiện được tuk-tuk xanh ở img_002 và các xích lô ở img_032.","Chỉ có 8 box trong 8 ảnh; bỏ sót nhiều xe ba bánh, có box nhầm ở img_002 và img_011; vài box khá rộng, dính người hoặc nền.",,work\prelabel\t_yoloe,cpu,8,0,, |
+| person / motorbike / car | YOLO26 + SAM 2.1 | 0.25 | r04,2,yolo26-m+sam(sam2.1_b.pt),"--model yolo26 --size m --classes person,motorbike,car --images img_004.jpg img_013.jpg --conf 0.3 --segmenter sam --sam sam2.1_b.pt --out work/prelabel/t_sam",custom,16,5.61,"Tạo được mask cho xe và người ở img_004, img_013; mask bám gần đúng hình bao ngoài của một số vật chính.","Ở img_013, tuk-tuk bị gán car và mask lẫn người lái, hành khách cùng vùng nền; ở img_004, box/mask car chồng lên xe ba bánh.",,work\prelabel\t_sam,cpu,2,16,umbrellax3;handbagx1;bottlex8;chairx1, |
 
-- Lệnh `merge_prelabels.py` đã dùng (dán nguyên): <<python scripts/merge_prelabels.py work/prelabel/yoloe_all/pre.coco.json work/prelabel/y26_all/pre.coco.json --thr "motorbike=0.35,three_wheeler=0.15" --conf 0.3 --iou 0.6 --split "batch,gold" --out work/prelabel/merged_review/pre.coco.json>>
-- **Phiên bản SAM bạn chọn** (SAM 1 / 2.1 / 3) và lý do: <<Chất lượng mask ở mức ổn, tốc độ nhanh, RAM 32gb nhưng không có CPU, Không phải đăng ký tài khoản Hugging Face để dùng như SAM 3>>
-- Lỗi nào **không sửa được bằng đổi ngưỡng** (ví dụ tuk-tuk bị gọi `car`)? Sửa thế nào? <<>>
-- Box **điểm cao mà sai** hoặc **điểm thấp mà đúng** (ảnh nào): <<>>
-- Giới hạn: chọn ngưỡng trên chính gold (4 ảnh) nên số đo máy trên gold là lạc quan: <<>>
+- Lệnh `merge_prelabels.py` đã dùng (dán nguyên): python scripts/merge_prelabels.py work/prelabel/yoloe_all/pre.coco.json work/prelabel/y26_all/pre.coco.json --thr "motorbike=0.35,three_wheeler=0.15" --conf 0.3 --iou 0.6 --split "batch,gold" --out work/prelabel/merged_review/pre.coco.json
+- **Phiên bản SAM bạn chọn** (SAM 1 / 2.1 / 3) và lý do: Chất lượng mask ở mức ổn, tốc độ nhanh, RAM 32gb nhưng không có CPU, Không phải đăng ký tài khoản Hugging Face để dùng như SAM 3
+- Lỗi nào **không sửa được bằng đổi ngưỡng** (ví dụ tuk-tuk bị gọi `car`)? Sửa thế nào?
+
+YOLO26 gán xe tuk-tuk thành car (ví dụ ở img_013.jpg). Đổi ngưỡng chỉ lọc box, không sửa được nhãn; dùng YOLOE với prompt tuk-tuk=three_wheeler, ưu tiên kết quả đó khi gộp, rồi rà sửa thủ công trong CVAT.
+
+- Box **điểm cao mà sai** hoặc **điểm thấp mà đúng** (ảnh nào):
+Ở img_032.jpg, YOLOE nhận đúng xích lô bên phải là three_wheeler dù confidence chỉ 0.27.
+
+- Giới hạn: chọn ngưỡng trên chính gold (4 ảnh) nên số đo máy trên gold là lạc quan:
+Ngưỡng được chọn trên chính 4 ảnh gold nên kết quả đo trên gold có thể lạc quan, không còn là đánh giá độc lập. Chọn ngưỡng trên pilot/dev; giữ gold để đánh giá cuối. Nếu đã dùng gold để chọn ngưỡng, cần một bộ hold-out khác để đánh giá.
 
 ## 2. AI error profile (từ `qc/review_stats.md`)
 
