@@ -6,10 +6,10 @@
 
 | Lớp | Model + cỡ | Ngưỡng | Vì sao (dẫn `run_id` trong `model_log.csv`) |
 |---|---|---|---|
-| person / bicycle / motorbike / car / bus / truck | <<YOLO26m>> | <<0.25>> | <<>> |
-| person / bicycle / motorbike / car / bus / truck | <<YOLO26m>> | <<0.5>> | <<>> |
-| three_wheeler | <<YOLOE-26s>> | <<0.25>> | <<>> |
-| person / motorbike / car | <<YOLO26 + SAM 2.1>> | <<0.25>> | <<>> |
+| person / bicycle / motorbike / car / bus / truck | YOLO26m | 0.25 | <<>> |
+| person / bicycle / motorbike / car / bus / truck | YOLO26m | 0.5 | <<>> |
+| three_wheeler | YOLOE-26s | 0.25 | <<>> |
+| person / motorbike / car | YOLO26 + SAM 2.1 | <<0.25>> | <<>> |
 
 - Lệnh `merge_prelabels.py` đã dùng (dán nguyên): <<python scripts/merge_prelabels.py work/prelabel/yoloe_all/pre.coco.json work/prelabel/y26_all/pre.coco.json --thr "motorbike=0.35,three_wheeler=0.15" --conf 0.3 --iou 0.6 --split "batch,gold" --out work/prelabel/merged_review/pre.coco.json>>
 - **Phiên bản SAM bạn chọn** (SAM 1 / 2.1 / 3) và lý do: <<Chất lượng mask ở mức ổn, tốc độ nhanh, RAM 32gb nhưng không có CPU, Không phải đăng ký tài khoản Hugging Face để dùng như SAM 3>>
