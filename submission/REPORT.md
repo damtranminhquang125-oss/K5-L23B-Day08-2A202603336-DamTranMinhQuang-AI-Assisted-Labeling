@@ -77,4 +77,4 @@ Nếu Rework / Hold, việc cần làm tiếp: Xác nhận ID 130 có phải min
 - Máy / GPU / CVAT dùng; vướng mắc cài đặt: 32GB/CPU/CVAT 2.81
 - Dùng cache `data/cache/` thay vì tự chạy? Không
 - Lỗi / bug script đã gặp (nếu có): Không
-- Một điều bạn làm khác lần sau: <<>>
+- Một điều bạn làm khác lần sau: ...
