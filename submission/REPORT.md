@@ -13,28 +13,21 @@
 
 - Lệnh `merge_prelabels.py` đã dùng (dán nguyên): python scripts/merge_prelabels.py work/prelabel/yoloe_all/pre.coco.json work/prelabel/y26_all/pre.coco.json --thr "motorbike=0.35,three_wheeler=0.15" --conf 0.3 --iou 0.6 --split "batch,gold" --out work/prelabel/merged_review/pre.coco.json
 - **Phiên bản SAM bạn chọn** (SAM 1 / 2.1 / 3) và lý do: Chất lượng mask ở mức ổn, tốc độ nhanh, RAM 32gb nhưng không có CPU, Không phải đăng ký tài khoản Hugging Face để dùng như SAM 3
-- Lỗi nào **không sửa được bằng đổi ngưỡng** (ví dụ tuk-tuk bị gọi `car`)? Sửa thế nào?
-
-YOLO26 gán xe tuk-tuk thành car (ví dụ ở img_013.jpg). Đổi ngưỡng chỉ lọc box, không sửa được nhãn; dùng YOLOE với prompt tuk-tuk=three_wheeler, ưu tiên kết quả đó khi gộp, rồi rà sửa thủ công trong CVAT.
-
-- Box **điểm cao mà sai** hoặc **điểm thấp mà đúng** (ảnh nào):
-Ở img_032.jpg, YOLOE nhận đúng xích lô bên phải là three_wheeler dù confidence chỉ 0.27.
-
-- Giới hạn: chọn ngưỡng trên chính gold (4 ảnh) nên số đo máy trên gold là lạc quan:
-Ngưỡng được chọn trên chính 4 ảnh gold nên kết quả đo trên gold có thể lạc quan, không còn là đánh giá độc lập. Chọn ngưỡng trên pilot/dev; giữ gold để đánh giá cuối. Nếu đã dùng gold để chọn ngưỡng, cần một bộ hold-out khác để đánh giá.
+- Lỗi nào **không sửa được bằng đổi ngưỡng** (ví dụ tuk-tuk bị gọi `car`)? Sửa thế nào? YOLO26 gán xe tuk-tuk thành car (ví dụ ở img_013.jpg). Đổi ngưỡng chỉ lọc box, không sửa được nhãn; dùng YOLOE với prompt tuk-tuk=three_wheeler, ưu tiên kết quả đó khi gộp, rồi rà sửa thủ công trong CVAT.
+- Box **điểm cao mà sai** hoặc **điểm thấp mà đúng** (ảnh nào): Ở img_032.jpg, YOLOE nhận đúng xích lô bên phải là three_wheeler dù confidence chỉ 0.27.
+- Giới hạn: chọn ngưỡng trên chính gold (4 ảnh) nên số đo máy trên gold là lạc quan: Ngưỡng được chọn trên chính 4 ảnh gold nên kết quả đo trên gold có thể lạc quan, không còn là đánh giá độc lập. Chọn ngưỡng trên pilot/dev; giữ gold để đánh giá cuối. Nếu đã dùng gold để chọn ngưỡng, cần một bộ hold-out khác để đánh giá.
 
 ## 2. AI error profile (từ `qc/review_stats.md`)
 
 | Trạng thái | Số | Tỉ lệ | Mẫu số |
 |---|---|---|---|
-| accepted | <<>> | <<>> | <<box máy>> |
-| edited | <<>> | <<>> | <<>> |
-| deleted | <<>> | <<>> | <<>> |
-| added | <<>> | <<>> | <<đối tượng sau duyệt>> |
+| accepted | 383 | 383/510 = 75.1% | 510 box máy |
+| edited | 64 | 64/510 = 12.5% | 510 box máy |
+| deleted | 57 | 57/510 = 11.2% | 510 box máy |
+| added | 44 | 44/493 = 8.9% | 493 đối tượng sau duyệt |
 
-- Lớp nào máy tệ nhất? Vì sao (dẫn ảnh)? <<>>
-- So với gold: precision / recall của **máy** <<>> (mẫu số: <<đối tượng gold>>)
-
+- Lớp nào máy tệ nhất? Vì sao (dẫn ảnh)? three_wheeler — chỉ 8 box được giữ nguyên, 10 cần sửa và 25 bị xoá (cao nhất). Tuk-tuk dễ bị nhầm thành car: thấy ví dụ ở img_004.jpg và img_013.jpg, nơi box car chồng lên xe tuk-tuk. YOLO26 không có lớp tuk-tuk riêng; YOLOE có thể nhận lớp này nhưng box vẫn cần kiểm tra và chỉnh.
+- So với gold: precision của **máy** 67,7%, recall 89,8%; mẫu số recall là 49 đối tượng gold (TP=44, FP=21, FN=5).
 ## 3. Thiên kiến tự động hóa và ảnh bẫy
 
 - Bắt bẫy: <<.../12>>; loại nào lọt: <<>>; vì sao (bạn đã bỏ bước nào của checklist)? <<>>
