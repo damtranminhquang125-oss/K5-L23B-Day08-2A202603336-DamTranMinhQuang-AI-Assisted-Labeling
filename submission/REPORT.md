@@ -30,17 +30,17 @@
 - So với gold: precision của **máy** 67,7%, recall 89,8%; mẫu số recall là 49 đối tượng gold (TP=44, FP=21, FN=5).
 ## 3. Thiên kiến tự động hóa và ảnh bẫy
 
-- Bắt bẫy: <<.../12>>; loại nào lọt: <<>>; vì sao (bạn đã bỏ bước nào của checklist)? <<>>
-- Accepted cao mà bắt bẫy thấp (hoặc ngược lại) nói gì về cách bạn duyệt? <<>>
+- Bắt bẫy: 12/12 (100%); loại nào lọt: không có; vì sao: không có bẫy nào bị bỏ sót nên chưa thấy bước checklist nào bị bỏ. Bắt đủ 3/3 ở cả wrong_class, missing, extra, loose. Tuy vậy, chỉ có 12 bẫy nên chưa thể khẳng định cách duyệt luôn hiệu quả.
+- Accepted cao mà bắt bẫy thấp (hoặc ngược lại) nói gì về cách bạn duyệt? Accepted 75,1% nhưng bắt bẫy 100% cho thấy cách em duyệt giữ được nhiều box máy đúng, đồng thời vẫn phát hiện các lỗi được cài vào. Nếu accepted cao nhưng bắt bẫy thấp thì có thể do quá tin nhãn máy hoặc lướt checklist; ngược lại, accepted thấp nhưng bắt bẫy cao có thể là duyệt kỹ nhưng sửa/xoá nhiều—cần phân biệt sửa có căn cứ với sửa quá tay.
 
 ## 4. Máy có đáng dùng không?
 
-- Thời gian (từ `time_log.csv`): gán tay <<... phút/ảnh>> vs duyệt <<... phút/ảnh>>. Thiên lệch (bạn gán gold trước nên đã quen cảnh): <<>>
-- Kết luận: <<có / không / chỉ cho lớp nào>>, dựa trên <<số liệu>>
+- Thời gian (từ `time_log.csv`): gán tay <<6 phút/ảnh>> vs duyệt <<3 phút/ảnh>>. Thiên lệch (bạn gán gold trước nên đã quen cảnh): <<50%>>
+- Kết luận: Có, dùng máy như trợ lý pre-label chứ không thay người duyệt. Trên 4 ảnh gold, precision 67,7% (44 TP, 21 FP) và recall 89,8% (44/49); trong 24 ảnh, 75,1% box được giữ nguyên. Tuy nhiên, three_wheeler yếu nhất (25 deleted, 10 edited), nên cần kiểm tra kỹ lớp này. Số gold ít và ngưỡng được chọn trên chính gold, nên kết quả có thể lạc quan
 - **Ba quy tắc giảm thiên kiến của bạn** (mỗi quy tắc kiểm tra được bằng số hoặc việc làm):
-  1. <<>>
-  2. <<>>
-  3. <<>>
+  1. <<Trước khi bật nhãn máy, quét ảnh gốc và ghi nhận đối tượng; mục tiêu 24/24 ảnh được xem trước.>>
+  2. <<Dùng checklist cố định để kiểm tra lớp, box và vật nhỏ/bị che; kiểm riêng mọi box three_wheeler.>>
+  3. <<Kiểm tra ngẫu nhiên .../24 ảnh sau duyệt bằng người thứ hai; ghi lỗi và giữ lô để sửa nếu tỷ lệ lỗi vượt ngưỡng QC 2%.>>
 
 ## 5. Mask SAM cho 3 vật (Part 5)
 
